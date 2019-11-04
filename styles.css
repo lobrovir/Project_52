@@ -24,10 +24,8 @@ table {
   padding: 5px;
   margin: auto;
 }
-td {
-   border-style:solid;
-}
-th {
+th, td {
+  padding:5px;
    border-style:solid;
 }
 
