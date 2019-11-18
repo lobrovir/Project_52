@@ -4,13 +4,11 @@
 {{/each}}
 <h3>Add new medication:</h3>
 <form id="addMedication" action="/medications" method="post">
-Name: <input type="text" name="name"><br>
-Pregnancy-safe: <input type="number" name="p_safe"><br>
-
+	Name: <input type="text" name="name"><br>
+	Pregnancy-safe: <input type="number" name="p_safe"><br>
     <input type="submit" value="Submit">
  </form>
 <br/>
-
 
 <h3>Current medications:</h3>
 <table>
@@ -22,10 +20,9 @@ Pregnancy-safe: <input type="number" name="p_safe"><br>
     <tbody>
         {{#each medication}} 
         <tr> 
-<td>{{ID}}</td>
+	    <td>{{ID}}</td>
             <td>{{name}}</td> 
             <td>{{p_safe}}</td> 
-
         </tr> 
         {{/each}} 
     </tbody> 
