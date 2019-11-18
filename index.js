@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 
 var app = express();
 var handlebars = require('express-handlebars').create({
-        defaultLayout:'main',
+        defaultLayout:'index',
         });
 
 app.engine('handlebars', handlebars.engine);
@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use('/static', express.static('public'));
 app.set('view engine', 'handlebars');
 app.set('port', process.argv[2]);
-app.set('mysql', mysql);
+app.set('pharmacy', pharmacy); /*sql*/
 app.use('/patients', require('./patients.js'));
 app.use('/doctors', require('./doctors.js.js'));
 app.use('/clinics', require('./clinics.js'));
