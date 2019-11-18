@@ -1,0 +1,35 @@
+<html>
+{{#each foo}}
+{{this}}
+{{/each}}
+<h3>Add new doctor:</h3>
+<form id="addDoctor" action="/doctors" method="post">
+    First Name: <input type="text" name="fname"><br>
+Last Name: <input type="text" name="lname"><br>
+Clinic ID: <input type="text" name="cid"><br>
+
+    <input type="submit" value="Submit">
+ </form>
+<br/>
+
+
+<h3>Current doctors:</h3>
+<table>
+    <thead> 
+	<th>ID</th>
+        <th>First Name</th> 
+        <th>Last Name</th> 
+        <th>Clinic ID</th>
+    </thead> 
+    <tbody>
+        {{#each doctor}} 
+        <tr> 
+            <td>{{fname}}</td> 
+            <td>{{lname}}</td> 
+            <td>{{cid}}</td> 
+
+        </tr> 
+        {{/each}} 
+    </tbody> 
+</table> 
+</html>
