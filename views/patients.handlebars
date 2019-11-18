@@ -4,19 +4,18 @@
 {{/each}}
 <h3>Add new patient:</h3>
 <form id="addPatient" action="/patients" method="post">
-    SSN: <input type="text" name="ssn"><br>
-    First name: <input type="text" name="fname"><br>
-    Last name: <input type="text" name="lname"><br>
-    Birthdate: <input type="text" name="birth"><br> 
+	SSN: <input type="text" name="ssn"><br>
+	First name: <input type="text" name="fname"><br>
+	Last name: <input type="text" name="lname"><br>
+	Birthdate: <input type="text" name="birth"><br> 
     <input type="submit" value="Submit">
  </form>
 <br/>
 
-
 <h3>Current patients:</h3>
 <table>
     <thead> 
-	<th>First Name</th>
+	<th>SSN</th>
         <th>First Name</th> 
         <th>Last Name</th> 
         <th>Birthdate</th>  
@@ -24,9 +23,9 @@
     <tbody>
         {{#each people}} 
         <tr> 
+	    <td>{{ssn}}</td> 
             <td>{{fname}}</td> 
             <td>{{lname}}</td> 
-            <td>{{ssn}}</td> 
             <td>{{birth}}</td>
         </tr> 
         {{/each}} 
