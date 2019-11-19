@@ -2,8 +2,8 @@ module.exports = function() {
   var express = require('express');
   var router = express.Router();
 
-  function getClinics(res, pharmacy, context, complete) {
-    pharmacy.pool.query("SELECT ID, name, address, city, state, zip FROM clinic, function(error, results, fields){
+  function getClinics(res, mysql, context, complete) {
+    mysql.pool.query("SELECT ID, name, address, city, state, zip FROM clinic, function(error, results, fields){
       if (error) {
         res.write(JSON.stringify(error));
         res.end();
@@ -15,8 +15,8 @@ module.exports = function() {
 router.get('/', function(req, res) {
   var callbackCount = 0;
   var context = {};
-  var pharmacy = req.app.get('pharmacy');
-  getClinics(res, pharmacy, context, complete);
+  var mysql = req.app.get('mysql');
+  getClinics(res, mysql, context, complete);
 
   function complete() {
     callbackCount++;
@@ -30,10 +30,10 @@ router.get('/', function(req, res) {
 /* Adds a clinic */
 router.post('/', function(req, res) {
   console.log(req.body)
-  var pharmacy = req.app.get('pharmacy');
+  var mysql = req.app.get('mysql');
   var sql = "INSERT INTO clinic (ID, name, address, city, state, zip) VALUES (?,?,?,?,?,?)";
   var inserts = [req.body.ID, req.body.name, req.body.address, req.body.city, req.body.state, req.body.zip];
-  sql = pharmacy.pool.query(sql, inserts, function(error, results, fields) {
+  sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
     if (error) {
       console.log(JSON.stringify(error))
       res.write(JSON.stringify(error));
