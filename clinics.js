@@ -21,7 +21,7 @@ router.get('/', function(req, res) {
   function complete() {
     callbackCount++;
     if (callbackCount >= 1) {
-      res.render('clinic', context);
+      res.render('clinics', context);
     }
 
   }
