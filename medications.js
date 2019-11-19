@@ -21,9 +21,8 @@ router.get('/', function(req, res) {
   function complete() {
     callbackCount++;
     if (callbackCount >= 1) {
-      res.render('medication', context);
+      res.render('medications', context);
     }
-
   }
 });
 /* Adds a medication*/
