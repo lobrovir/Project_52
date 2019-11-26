@@ -48,14 +48,14 @@ CREATE TABLE prescription
 	PRIMARY KEY (ID)
 ) ENGINE = InnoDB;
 
-CREATE TABLE doctor_prescription
+CREATE TABLE prescription_doctor
 (
-	DOC_ID int(11) NOT NULL,
 	PRES_ID int(11) NOT NULL,
+	DOC_ID int(11) NOT NULL,
 	
 	FOREIGN KEY (DOC_ID) REFERENCES doctor (ID),
 	FOREIGN KEY (PRES_ID) REFERENCES prescription (ID),
-	PRIMARY KEY (DOC_ID, PRES_ID)
+	PRIMARY KEY (PRES_ID, DOC_ID)
 ) ENGINE = InnoDB;
 
 
@@ -144,8 +144,8 @@ INSERT INTO prescription(ID, PAT_SSN, MED_ID) VALUES
 (61,524376845,4);
 UNLOCK TABLES;
 
-LOCK TABLES doctor_prescription WRITE;
-INSERT INTO doctor_prescription(PRES_ID, DOC_ID) VALUES
+LOCK TABLES prescription_doctor WRITE;
+INSERT INTO prescription_doctor(PRES_ID, DOC_ID) VALUES
 (1,1),(2,2),(3,5),(4,6),(5,2),(6,4),(7,3),(8,3),(9,5),(10,8),
 (11,2),(12,2),(13,4),(14,6),(15,6),(16,4),(17,9),(18,8),(19,9),(20,3),
 (21,5),(22,3),(23,4),(24,7),(25,9),(26,9),(27,3),(28,1),(29,6),(30,2),
