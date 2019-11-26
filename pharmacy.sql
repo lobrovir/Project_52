@@ -4,11 +4,7 @@ CREATE TABLE patient
 	first_name varchar(255) NOT NULL,
 	last_name varchar(255) NOT NULL,
 	birthdate DATE NOT NULL,
-	MED_ID int,
-	DOC_ID int,
-	PRIMARY KEY (SSN),
-	FOREIGN KEY (MED_ID) REFERENCES medication(ID),
-	FOREIGN KEY (DOC_ID) REFERENCES doctor(ID)
+	PRIMARY KEY (SSN)
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE medication
@@ -37,80 +33,115 @@ CREATE TABLE doctor
 	last_name varchar(255) NOT NULL,
 	C_ID int(11),
 	PRIMARY KEY (ID),
-	FOREIGN KEY (C_ID) REFERENCES clinic (ID)
+	CONSTRAINT doc_clinic FOREIGN KEY (C_ID) REFERENCES clinic (ID)
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
-/*The new plan is to generate these tables using data manipulations
-eg inner joins so the user can look up a specific patient in the actual site.
-These table might be useful in other situations so I'm just commenting
-them out for now.
-CREATE TABLE patient_medication
+CREATE TABLE prescription
 (
-	P_SSN int(11) NOT NULL,
-	M_ID int(11) NOT NULL,
+	ID int(11) NOT NULL AUTO_INCREMENT,
+	PAT_SSN int(11) NOT NULL,
+	MED_ID int(11) NOT NULL,
 	
-	FOREIGN KEY (P_SSN) REFERENCES patient (SSN),
-	FOREIGN KEY (M_ID) REFERENCES medication (ID),
-	PRIMARY KEY (P_SSN, M_ID)
+	FOREIGN KEY (PAT_SSN) REFERENCES patient (SSN),
+	FOREIGN KEY (MED_ID) REFERENCES medication (ID),
+	PRIMARY KEY (ID)
 ) ENGINE = InnoDB;
 
-CREATE TABLE doctor_medication
+CREATE TABLE doctor_prescription
 (
-	D_ID int(11) NOT NULL,
-	M_ID int(11) NOT NULL,
+	DOC_ID int(11) NOT NULL,
+	PRES_ID int(11) NOT NULL,
 	
-	FOREIGN KEY (D_ID) REFERENCES doctor (ID),
-	FOREIGN KEY (M_ID) REFERENCES medication (ID),
-	PRIMARY KEY (D_ID, M_ID)
+	FOREIGN KEY (DOC_ID) REFERENCES doctor (ID),
+	FOREIGN KEY (PRES_ID) REFERENCES prescription (ID),
+	PRIMARY KEY (DOC_ID, PRES_ID)
 ) ENGINE = InnoDB;
 
-*/
 
 LOCK TABLES patient WRITE;
-INSERT INTO patient(SSN, first_name, last_name, birthdate, MED_ID, DOC_ID) VALUES
+INSERT INTO patient(SSN, first_name, last_name, birthdate) VALUES
 
-(102384662,'John','Johnson','1945-22-03',2,3),
-(639284611, 'Ellen', 'Norris', '1934-03-12',8,2),
-(934772337,'Victoria','Addams','1963-11-05',7,4),
-(733492091,'Caroline','Stevenson','2011-05-01',10,3),
-(733492091,'Caroline','Stevenson','2011-05-01',10,4),
-(378455109,'Benjamin','Norris','1987-17-08',1,2),
-(342265096, 'Peter', 'Jacobs','1993-27-11', 1,8),
-(473829476, 'Blake', 'Harrison', '2014-20-04',1,6),
-(453261187, 'Haley', 'Mathison', '2001-13-07',6,4),
-(342265096, 'Peter', 'Jacobs','1993-27-11', 9,3),
-(733492091,'Caroline','Stevenson','2011-05-01',1,2),
-(102384662,'John','Johnson','1945-22-03',1,3),
-(934772337,'Victoria','Addams','1963-11-05',3,5),
-(341285421, 'Harry', 'Whiteside', '1971-03-02',2,3),
-(102384662,'John','Johnson','1945-22-03',1,5),
-(639284611, 'Ellen', 'Norris', '1934-03-12',8,5),
-(934772337,'Victoria','Addams','1963-11-05',6,2),
-(733492091,'Caroline','Stevenson','2011-05-01',10,8),
-(378455109,'Benjamin','Norris','1987-17-08',1,2),
-(255788922,'Emily','Langford','2016-13-06',4,5),
-(352846454,'Tom', 'Bleary', '1985-20-10',3,2),
-(462846589, 'John', 'Carver', '1967-28-08',2,2),
-(102384662,'John','Johnson','1945-22-03',1,4),
-(341285421, 'Harry', 'Whiteside', '1971-03-02',6,1),
-(364519102, 'Noah', 'McKinley', '1987-14-07',3,9),
-(473829476, 'Blake', 'Harrison', '2014-20-04',3,10),
-(473829476, 'Blake', 'Harrison', '2014-20-04',2,7),
-(524376845, 'Mary', 'Hartford', '1942-18-06',3,8),
-(364519102, 'Noah', 'McKinley', '1987-14-07',4,4),
-(453261187, 'Haley', 'Mathison', '2001-13-07',6,5),
-(341285421, 'Harry', 'Whiteside', '1971-03-02',2,1),
-(473829476, 'Blake', 'Harrison', '2014-20-04',7,10),
-(524376845, 'Mary', 'Hartford', '1942-18-06',9,8),
-(733492091,'Caroline','Stevenson','2011-05-01',10,1),
-(378455109,'Benjamin','Norris','1987-17-08',3,6),
-(473829476, 'Blake', 'Harrison', '2014-20-04',7,2),
-(342265096, 'Peter', 'Jacobs','1993-27-11', 3,3),
-(453261187, 'Haley', 'Mathison', '2001-13-07',6,2),
-(524376845, 'Mary', 'Hartford', '1942-18-06',3,2),
-(453261187, 'Haley', 'Mathison', '2001-13-07',2,7);
+(102384662,'John','Johnson','1945-22-03'),
+(639284611, 'Ellen', 'Norris', '1934-03-12'),
+(934772337,'Victoria','Addams','1963-11-05'),
+(733492091,'Caroline','Stevenson','2011-05-01'),
+(378455109,'Benjamin','Norris','1987-17-08'),
+(473829476, 'Blake', 'Harrison', '2014-20-04'),
+(341285421, 'Harry', 'Whiteside', '1971-03-02'),
+(255788922,'Emily','Langford','2016-13-06'),
+(352846454,'Tom', 'Bleary', '1985-20-10'),
+(462846589, 'John', 'Carver', '1967-28-08'),
+(364519102, 'Noah', 'McKinley', '1987-14-07'),
+(342265096, 'Peter', 'Jacobs','1993-27-11'),
+(453261187, 'Haley', 'Mathison', '2001-13-07'),
+(524376845, 'Mary', 'Hartford', '1942-18-06');
 
+UNLOCK TABLES;
+
+LOCK TABLES prescription WRITE;
+INSERT INTO patient_medication(ID, PAT_SSN, MED_ID) VALUES
+(1,102384662,3),
+(2,102384662,5),
+(3,102384662,5),
+(4,102384662,7),
+(5,639284611,1),
+(6,639284611,2),
+(7,639284611,8),
+(8,639284611,9),
+(9,639284611,9),
+(10,934772337,10),
+(11,934772337,4),
+(12,934772337,6),
+(13,934772337,6),
+(14,934772337,7),
+(15,733492091,4),
+(16,733492091,4),
+(17,733492091,3),
+(18,733492091,2),
+(19,378455109,9),
+(20,378455109,8),
+(21,378455109,2),
+(22,473829476,3),
+(23,473829476,3),
+(24,473829476,5),
+(25,473829476,7),
+(26,473829476,7),
+(27,473829476,2),
+(28,341285421,1),
+(29,341285421,5),
+(30,341285421,10),
+(31,341285421,8),
+(32,255788922,1),
+(33,255788922,1),
+(34,255788922,6),
+(35,352846454,9),
+(36,352846454,9),
+(37,352846454,2),
+(38,352846454,8),
+(39,352846454,7),
+(40,462846589,10),
+(41,462846589,6),
+(42,462846589,4),
+(43,364519102,1),
+(44,364519102,3),
+(45,364519102,5),
+(46,364519102,8),
+(47,364519102,9),
+(48,342265096,2),
+(49,342265096,2),
+(50,342265096,8),
+(51,342265096,10),
+(52,342265096,10),
+(53,342265096,6),
+(54,342265096,5),
+(55,453261187,3),
+(56,453261187,1),
+(57,453261187,7),
+(58,453261187,7),
+(59,524376845,2),
+(60,524376845,4),
+(61,524376845,4),
 UNLOCK TABLES;
 
 LOCK TABLES medication WRITE;
