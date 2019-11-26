@@ -68,12 +68,18 @@ CREATE TABLE doctor_medication
 */
 
 LOCK TABLES patient WRITE;
-INSERT INTO patient(SSN, first_name, last_name, birthdate) VALUES
-(733492091,'Caroline','Stevenson','2011-05-01'),
-(102384662,'John','Johnson','1945-22-03'),
-(934772337,'Victoria','Addams','1963-11-05'),
-(378455109,'Benjamin','Norris','1987-17-08'),
-(255788922,'Emily','Langford','2016-13-06');
+INSERT INTO patient(SSN, first_name, last_name, birthdate, MED_ID, DOC_ID) VALUES
+(733492091,'Caroline','Stevenson','2011-05-01',1,2),
+(102384662,'John','Johnson','1945-22-03',1,3),
+(934772337,'Victoria','Addams','1963-11-05'3,5),
+(378455109,'Benjamin','Norris','1987-17-08',1,2),
+(255788922,'Emily','Langford','2016-13-06'4,5),
+(352846454,'Tom', 'Bleary', '1985-20-10',3,2),
+(462846589, 'John', 'Carver', '1967-28-08',2,2),
+(102384662,'John','Johnson','1945-22-03',1,4),
+(102384662,'John','Johnson','1945-22-03',2,3),
+(639284611, 'Ellen', 'Norris', '1934-03-12',5,1);
+
 UNLOCK TABLES;
 
 LOCK TABLES medication WRITE;
@@ -100,5 +106,10 @@ INSERT INTO doctor(ID, first_name, last_name,C_ID) VALUES
 (2,'Jeremy','Johsnon',2),
 (3,'Emily','Benson',2),
 (4, 'Norman', 'Langley',1),
-(5, 'Karen', 'Freeman', 3);
+(5, 'Karen', 'Freeman', 3),
+(6, 'John', 'Kenzie', 5),
+(7, 'Meredith', 'Baxter', 4),
+(8, 'Eva', 'Terrence', 4),
+(9, 'Steve', 'Harrison', 2),
+(10, 'Kevin', 'Jeremiah', 1);
 UNLOCK TABLES;
