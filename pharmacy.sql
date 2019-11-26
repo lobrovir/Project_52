@@ -71,14 +71,18 @@ LOCK TABLES patient WRITE;
 INSERT INTO patient(SSN, first_name, last_name, birthdate, MED_ID, DOC_ID) VALUES
 (733492091,'Caroline','Stevenson','2011-05-01',1,2),
 (102384662,'John','Johnson','1945-22-03',1,3),
-(934772337,'Victoria','Addams','1963-11-05'3,5),
+(934772337,'Victoria','Addams','1963-11-05',3,5),
 (378455109,'Benjamin','Norris','1987-17-08',1,2),
-(255788922,'Emily','Langford','2016-13-06'4,5),
+(255788922,'Emily','Langford','2016-13-06',4,5),
 (352846454,'Tom', 'Bleary', '1985-20-10',3,2),
 (462846589, 'John', 'Carver', '1967-28-08',2,2),
 (102384662,'John','Johnson','1945-22-03',1,4),
 (102384662,'John','Johnson','1945-22-03',2,3),
-(639284611, 'Ellen', 'Norris', '1934-03-12',5,1);
+(639284611, 'Ellen', 'Norris', '1934-03-12',8,2),
+(934772337,'Victoria','Addams','1963-11-05',7,4),
+(733492091,'Caroline','Stevenson','2011-05-01',10,3),
+(733492091,'Caroline','Stevenson','2011-05-01',10,4),
+(378455109,'Benjamin','Norris','1987-17-08',1,2);
 
 UNLOCK TABLES;
 
@@ -88,7 +92,13 @@ INSERT INTO medication(ID, name, p_safe) VALUES
 (2, 'Codeine', 0),
 (3, 'Clonazepam', 0),
 (4, 'Prozac', 1),
-(5, 'Paxil', 0);
+(5, 'Paxil', 0),
+(6, 'Ativan', 0),
+(7, 'Thalidomide',0),
+(8, 'Isotretinoin', 0),
+(9, 'Prilosec', 0),
+(10, 'Penicilin',1);
+
 UNLOCK TABLES;
 
 LOCK TABLES clinic WRITE;
