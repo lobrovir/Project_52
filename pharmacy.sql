@@ -80,7 +80,7 @@ INSERT INTO patient(SSN, first_name, last_name, birthdate) VALUES
 UNLOCK TABLES;
 
 LOCK TABLES prescription WRITE;
-INSERT INTO patient_medication(ID, PAT_SSN, MED_ID) VALUES
+INSERT INTO prescription(ID, PAT_SSN, MED_ID) VALUES
 (1,102384662,3),
 (2,102384662,5),
 (3,102384662,5),
@@ -141,7 +141,18 @@ INSERT INTO patient_medication(ID, PAT_SSN, MED_ID) VALUES
 (58,453261187,7),
 (59,524376845,2),
 (60,524376845,4),
-(61,524376845,4),
+(61,524376845,4);
+UNLOCK TABLES;
+
+LOCK TABLES doctor_prescription WRITE;
+INSERT INTO doctor_prescription(PRES_ID, DOC_ID) VALUES
+(1,1),(2,2),(3,5),(4,6),(5,2),(6,4),(7,3),(8,3),(9,5),(10,8),
+(11,2),(12,2),(13,4),(14,6),(15,6),(16,4),(17,9),(18,8),(19,9),(20,3),
+(21,5),(22,3),(23,4),(24,7),(25,9),(26,9),(27,3),(28,1),(29,6),(30,2),
+(31,4),(32,5),(33,7),(34,9),(35,10),(36,3),(37,1),(38,2),(39,7),(40,5),
+(41,8),(42,7),(43,8),(44,10),(45,10),(46,5),(47,6),(48,8),(49,2),(50,9),
+(51,9),(52,9),(53,10),(54,8),(55,7),(56,7),(57,2),(58,3),(59,4),(60,5),
+(61,10);
 UNLOCK TABLES;
 
 LOCK TABLES medication WRITE;
