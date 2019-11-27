@@ -74,3 +74,42 @@ INNER JOIN prescription PRES ON PRES.PAT_SSN = P.SSN
 INNER JOIN prescription_doctor PRES_DOC on PRES_DOC.PRES_ID = PRES.ID
 INNER JOIN doctor D ON D.ID = PRES_DOC.DOC_ID
 ORDER BY SSN;
+
+/*Table:Look up a patient's doctors from user input*/
+SELECT DISTINCT P.SSN, P.last_name AS 'Patient Last', D.ID AS 'DOC_ID', D.last_name AS 'Doctor Last' FROM patient P
+INNER JOIN prescription PRES ON PRES.PAT_SSN = P.SSN
+INNER JOIN prescription_doctor PRES_DOC on PRES_DOC.PRES_ID = PRES.ID
+INNER JOIN doctor D ON D.ID = PRES_DOC.DOC_ID
+WHERE P.SSN = '&userInput'
+ORDER BY D.ID;
+
+/*Table:Look up a doctor's patients from user input*/
+SELECT DISTINCT D.ID AS 'DOC_ID', D.last_name AS 'Doctor Last', P.SSN, P.last_name AS 'Patient Last',  FROM patient P
+INNER JOIN prescription PRES ON PRES.PAT_SSN = P.SSN
+INNER JOIN prescription_doctor PRES_DOC on PRES_DOC.PRES_ID = PRES.ID
+INNER JOIN doctor D ON D.ID = PRES_DOC.DOC_ID
+WHERE D.ID = '&userInput'
+ORDER BY SSN;
+
+/*Creates a table of all the medications that have been prescribed by doctors in ascending order*/
+SELECT PRES.ID AS 'Prescription', M.ID AS 'MED_ID', M.name AS 'Medication', D.ID AS 'DOC_ID', D.last_name AS 'Doctor Last' FROM medication M
+INNER JOIN prescription PRES ON PRES.MED_ID = M.ID
+INNER JOIN prescription_doctor PRES_DOC ON PRES_DOC.PRES_ID = PRES.ID
+INNER JOIN doctor D ON D.ID = PRES_DOC.DOC_ID
+ORDER BY PRES.ID;
+
+/*Table: All the prescriptions by an inputted doctor*/
+SELECT PRES.ID AS 'Prescription', M.ID AS 'MED_ID', M.name AS 'Medication', D.ID AS 'DOC_ID', D.last_name AS 'Doctor Last' FROM medication M
+INNER JOIN prescription PRES ON PRES.MED_ID = M.ID
+INNER JOIN prescription_doctor PRES_DOC ON PRES_DOC.PRES_ID = PRES.ID
+INNER JOIN doctor D ON D.ID = PRES_DOC.DOC_ID
+WHERE D.ID = '&userInput'
+ORDER BY PRES.ID;
+
+/*Table: All the doctors that have prescribed a specific medication*/
+SELECT PRES.ID AS 'Prescription', M.ID AS 'MED_ID', M.name AS 'Medication', D.ID AS 'DOC_ID', D.last_name AS 'Doctor Last' FROM medication M
+INNER JOIN prescription PRES ON PRES.MED_ID = M.ID
+INNER JOIN prescription_doctor PRES_DOC ON PRES_DOC.PRES_ID = PRES.ID
+INNER JOIN doctor D ON D.ID = PRES_DOC.DOC_ID
+WHERE M.ID = '&userInput'
+ORDER BY PRES.ID;
