@@ -1,3 +1,6 @@
+
+SET FOREIGN_KEY_CHECKS=0;
+
 CREATE TABLE patient
 (
 	SSN int(11) NOT NULL,
@@ -40,14 +43,13 @@ CREATE TABLE doctor
 CREATE TABLE prescription
 (
 	ID int(11) NOT NULL AUTO_INCREMENT,
+  	issue_date DATE NOT NULL,
 	PAT_SSN int(11) NOT NULL,
 	MED_ID int(11) NOT NULL,
-	issue_date DATE NOT NULL,
-	
 	FOREIGN KEY (PAT_SSN) REFERENCES patient (SSN),
-	FOREIGN KEY (MED_ID) REFERENCES medication (ID),
+	FOREIGN KEY (MED_ID) REFERENCES medication(ID),
 	PRIMARY KEY (ID)
-) ENGINE = InnoDB;
+) ENGINE = InnoDB  ;
 
 CREATE TABLE prescription_doctor
 (
@@ -57,10 +59,10 @@ CREATE TABLE prescription_doctor
 	FOREIGN KEY (DOC_ID) REFERENCES doctor (ID),
 	FOREIGN KEY (PRES_ID) REFERENCES prescription (ID),
 	PRIMARY KEY (PRES_ID, DOC_ID)
-) ENGINE = InnoDB;
+) ENGINE = InnoDB DEFAULT CHARSET=latin1;
 
 
-LOCK TABLES patient WRITE;
+
 INSERT INTO patient(SSN, first_name, last_name, birthdate) VALUES
 
 (102384662,'John','Johnson','1945-10-15'),
@@ -78,9 +80,9 @@ INSERT INTO patient(SSN, first_name, last_name, birthdate) VALUES
 (453261187, 'Haley', 'Mathison', '2001-10-31'),
 (524376845, 'Mary', 'Hartford', '1942-06-29');
 
-UNLOCK TABLES;
 
-LOCK TABLES prescription WRITE;
+
+
 INSERT INTO prescription(ID, PAT_SSN, MED_ID, issue_date) VALUES
 (1,102384662,3,'2019-11-03'),
 (2,102384662,5,'2019-11-07'),
@@ -143,9 +145,9 @@ INSERT INTO prescription(ID, PAT_SSN, MED_ID, issue_date) VALUES
 (59,524376845,2,'2019-11-11'),
 (60,524376845,4,'2019-11-05'),
 (61,524376845,4,'2019-11-01');
-UNLOCK TABLES;
 
-LOCK TABLES prescription_doctor WRITE;
+
+
 INSERT INTO prescription_doctor(PRES_ID, DOC_ID) VALUES
 (1,1),(2,2),(3,5),(4,6),(5,2),(6,4),(7,3),(8,3),(9,5),(10,8),
 (11,2),(12,2),(13,4),(14,6),(15,6),(16,4),(17,9),(18,8),(19,9),(20,3),
@@ -154,9 +156,8 @@ INSERT INTO prescription_doctor(PRES_ID, DOC_ID) VALUES
 (41,8),(42,7),(43,8),(44,10),(45,10),(46,5),(47,6),(48,8),(49,2),(50,9),
 (51,9),(52,9),(53,10),(54,8),(55,7),(56,7),(57,2),(58,3),(59,4),(60,5),
 (61,10);
-UNLOCK TABLES;
 
-LOCK TABLES medication WRITE;
+
 INSERT INTO medication(ID, name, p_safe) VALUES
 (1, 'Claritin D', 1),
 (2, 'Codeine', 0),
@@ -169,21 +170,21 @@ INSERT INTO medication(ID, name, p_safe) VALUES
 (9, 'Prilosec', 0),
 (10, 'Penicilin',1);
 
-UNLOCK TABLES;
 
-LOCK TABLES clinic WRITE;
+
+
 INSERT INTO clinic(ID, name, address,city,state,zip) VALUES
 (1,'Corvallis Family Medicine','2400 NW Kings Blvd','Corvallis','OR',97330),
 (2,'Samaritan Ahtletic Medicine Center','840 SW 39th St','Corvallis','OR',97331),
 (3,'Albany OB/GYN','705 SW Elm St Suite 200','Albany','OR',97321),
 (4,'Philomath Family Medicine, PC','1219 Applegate St','Philomath','OR',97370),
 (5,'Valley Clinics Internal Medicine, PC','981 NW Spruce Ave','Corvallis','OR',97330);
-UNLOCK TABLES;
 
-LOCK TABLES doctor WRITE;
+
+
 INSERT INTO doctor(ID, first_name, last_name,C_ID) VALUES
 (1,'Carl','Masson',3),
-(2,'Jeremy','Johsnon',2),
+(2,'Jeremy','Johnson',2),
 (3,'Emily','Benson',2),
 (4, 'Norman', 'Langley',1),
 (5, 'Karen', 'Freeman', 3),
@@ -192,4 +193,3 @@ INSERT INTO doctor(ID, first_name, last_name,C_ID) VALUES
 (8, 'Eva', 'Terrence', 4),
 (9, 'Steve', 'Harrison', 2),
 (10, 'Kevin', 'Jeremiah', 1);
-UNLOCK TABLES;
