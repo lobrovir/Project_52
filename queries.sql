@@ -139,3 +139,17 @@ SELECT D.ID AS 'DOC_ID', D.last_name AS 'Doctor Last', C.ID AS 'C_ID', C.name AS
 INNER JOIN clinic C ON C.ID = D.C_ID
 WHERE C.ID = '&userInput'
 ORDER BY D.ID;
+
+/*Table: All the medications an inputted patient has been prescribed*/
+SELECT DISTINCT M.ID AS 'MED_ID', M.name AS 'Medication', P.SSN, P.last_name AS 'Patient Last' FROM patient P
+INNER JOIN prescription PRES ON PRES.PAT_SSN = P.SSN
+INNER JOIN medication M ON M.ID = PRES.MED_ID
+WHERE P.SSN = '&userInput'
+ORDER BY M.ID;
+
+/*Table: All the patients that have been prescribed an inputted medication.*/
+SELECT DISTINCT M.ID AS 'MED_ID', M.name AS 'Medication', P.SSN, P.last_name AS 'Patient Last' FROM patient P
+INNER JOIN prescription PRES ON PRES.PAT_SSN = P.SSN
+INNER JOIN medication M ON M.ID = PRES.MED_ID
+WHERE M.ID = '&userInput'
+ORDER BY SSN;
