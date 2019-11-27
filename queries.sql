@@ -113,3 +113,29 @@ INNER JOIN prescription_doctor PRES_DOC ON PRES_DOC.PRES_ID = PRES.ID
 INNER JOIN doctor D ON D.ID = PRES_DOC.DOC_ID
 WHERE M.ID = '&userInput'
 ORDER BY PRES.ID;
+
+/*Table: All clinics all the patients go to*/
+
+SELECT DISTINCT P.SSN, P.last_name AS 'Patient Last', C.ID AS 'C_ID', C.name AS 'Clinic Name' FROM patient P
+INNER JOIN prescription PRES ON PRES.PAT_SSN = P.SSN
+INNER JOIN prescription_doctor PRES_DOC on PRES_DOC.PRES_ID = PRES.ID
+INNER JOIN doctor D ON D.ID = PRES_DOC.DOC_ID
+INNER JOIN clinic C ON C.ID = D.C_ID
+ORDER BY SSN;
+
+/*Table: Which clinic all the doctors are employed at*/
+SELECT D.ID AS 'DOC_ID', D.last_name AS 'Doctor Last', C.ID AS 'C_ID', C.name AS 'Clinic Name' FROM doctor D
+INNER JOIN clinic C ON C.ID = D.C_ID
+ORDER BY C.ID;
+
+/*Table:The clinic where a doctors works from input*/
+SELECT D.ID AS 'DOC_ID', D.last_name AS 'Doctor Last', C.ID AS 'C_ID', C.name AS 'Clinic Name' FROM doctor D
+INNER JOIN clinic C ON C.ID = D.C_ID
+WHERE D.ID = '&userInput'
+ORDER BY D.ID;
+
+/*Table: All the doctors employed at an iputted clinic*/
+SELECT D.ID AS 'DOC_ID', D.last_name AS 'Doctor Last', C.ID AS 'C_ID', C.name AS 'Clinic Name' FROM doctor D
+INNER JOIN clinic C ON C.ID = D.C_ID
+WHERE C.ID = '&userInput'
+ORDER BY D.ID;
