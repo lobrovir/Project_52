@@ -33,7 +33,7 @@ CREATE TABLE doctor
 	last_name varchar(255) NOT NULL,
 	C_ID int(11),
 	PRIMARY KEY (ID),
-	CONSTRAINT doc_clinic FOREIGN KEY (C_ID) REFERENCES clinic (ID)
+	FOREIGN KEY (C_ID) REFERENCES clinic (ID)
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
