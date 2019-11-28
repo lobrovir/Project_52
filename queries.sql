@@ -115,7 +115,6 @@ WHERE M.ID = '&userInput'
 ORDER BY PRES.ID;
 
 /*Table: All clinics all the patients go to*/
-
 SELECT DISTINCT P.SSN, P.last_name AS 'Patient Last', C.ID AS 'C_ID', C.name AS 'Clinic Name' FROM patient P
 INNER JOIN prescription PRES ON PRES.PAT_SSN = P.SSN
 INNER JOIN prescription_doctor PRES_DOC on PRES_DOC.PRES_ID = PRES.ID
@@ -123,7 +122,25 @@ INNER JOIN doctor D ON D.ID = PRES_DOC.DOC_ID
 INNER JOIN clinic C ON C.ID = D.C_ID
 ORDER BY SSN;
 
-/*Table: Which clinic all the doctors are employed at*/
+/*Table: All the clinics an inputted patient goes to*/
+SELECT DISTINCT P.SSN, P.last_name AS 'Patient Last', C.ID AS 'C_ID', C.name AS 'Clinic Name' FROM patient P
+INNER JOIN prescription PRES ON PRES.PAT_SSN = P.SSN
+INNER JOIN prescription_doctor PRES_DOC on PRES_DOC.PRES_ID = PRES.ID
+INNER JOIN doctor D ON D.ID = PRES_DOC.DOC_ID
+INNER JOIN clinic C ON C.ID = D.C_ID
+WHERE P.SSN = '&userInput'
+ORDER BY C.ID;
+
+/*Table: All the patients at an inputted clinic*/
+SELECT DISTINCT P.SSN, P.last_name AS 'Patient Last', C.ID AS 'C_ID', C.name AS 'Clinic Name' FROM patient P
+INNER JOIN prescription PRES ON PRES.PAT_SSN = P.SSN
+INNER JOIN prescription_doctor PRES_DOC on PRES_DOC.PRES_ID = PRES.ID
+INNER JOIN doctor D ON D.ID = PRES_DOC.DOC_ID
+INNER JOIN clinic C ON C.ID = D.C_ID
+WHERE C.ID = '&userInput'
+ORDER BY SSN;
+
+/*Table: Where all the doctors are employed*/
 SELECT D.ID AS 'DOC_ID', D.last_name AS 'Doctor Last', C.ID AS 'C_ID', C.name AS 'Clinic Name' FROM doctor D
 INNER JOIN clinic C ON C.ID = D.C_ID
 ORDER BY C.ID;
@@ -153,3 +170,20 @@ INNER JOIN prescription PRES ON PRES.PAT_SSN = P.SSN
 INNER JOIN medication M ON M.ID = PRES.MED_ID
 WHERE M.ID = '&userInput'
 ORDER BY SSN;
+
+/*A nice table giving all the useful information for all prescriptions in order of oldest issue date*/
+SELECT M.ID AS 'MED_ID', M.name AS 'Medication', P.SSN, P.last_name AS 'Patient Last', D.ID AS 'DOC_ID', D.last_name AS 'Doctor Last', PRES.issue_date AS 'Issue Date' FROM patient P
+INNER JOIN prescription PRES ON PRES.PAT_SSN = P.SSN
+INNER JOIN medication M ON M.ID = PRES.MED_ID
+INNER JOIN prescription_doctor PRES_DOC on PRES_DOC.PRES_ID = PRES.ID
+INNER JOIN doctor D ON D.ID = PRES_DOC.DOC_ID
+ORDER BY PRES.issue_date;
+
+/*Same nice prescription table, but for an inputted SSN, display all of a patient's prescriptions*/
+SELECT M.ID AS 'MED_ID', M.name AS 'Medication', P.SSN, P.last_name AS 'Patient Last', D.ID AS 'DOC_ID', D.last_name AS 'Doctor Last', PRES.issue_date AS 'Issue Date' FROM patient P
+INNER JOIN prescription PRES ON PRES.PAT_SSN = P.SSN
+INNER JOIN medication M ON M.ID = PRES.MED_ID
+INNER JOIN prescription_doctor PRES_DOC on PRES_DOC.PRES_ID = PRES.ID
+INNER JOIN doctor D ON D.ID = PRES_DOC.DOC_ID
+WHERE P.SSN = '&userInput'
+ORDER BY PRES.issue_date;
