@@ -1,5 +1,5 @@
 /*NEW CODE*/
-/*display patient_doctor*/
+/*display patient_doctor. (There's a prettier version with inner joins below)*/
 SELECT * FROM patient_doctor;
 /*delete patient_doctor*/
 DELETE FROM patient_doctor WHERE PAT_SSN = :PAT_SSN AND DOC_ID = :DOC_ID;
@@ -93,7 +93,6 @@ UPDATE clinic
 SET address = :address, city = :city, state = :state, zip = :zip
 WHERE ID = :ID;
 
-/*edit patient_doctor*/
 /*Variations of all the tables we may use*/
 /*Creates doctor_patient m:m table with IDs and last names for context for User*/
 /*Order by SSN: for patient's doctors. Order by: D.ID for doctor's patients*/
