@@ -4,9 +4,9 @@ SELECT * FROM patient_doctor;
 /*delete patient_doctor*/
 DELETE FROM patient_doctor WHERE PAT_SSN = :PAT_SSN AND DOC_ID = :DOC_ID;
 /*new relationship: 
-These must use values that already exist, liek from a pull-down bar.
+These must use values that already exist, like from a pull-down bar.
 Also will not allow duplicates.*/
-INSERT INTO patient_doctor (PAT_SSN, DOC_ID) VALUES (:PAT_SSN, :DOC_ID;
+INSERT INTO patient_doctor (PAT_SSN, DOC_ID) VALUES (:PAT_SSN, :DOC_ID);
 
 /*The prescription entity is for tying everything together, not for display purposes.
 So we will use this code to display an actual prescription*/
