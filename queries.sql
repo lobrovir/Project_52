@@ -1,3 +1,30 @@
+/*NEW CODE*/
+/*display patient_doctor*/
+SELECT * FROM patient_doctor;
+/*delete patient_doctor*/
+DELETE FROM patient_doctor WHERE PAT_SSN = :PAT_SSN AND DOC_ID = :DOC_ID;
+/*new relationship: 
+These must use values that already exist, liek from a pull-down bar.
+Also will not allow duplicates.*/
+INSERT INTO patient_doctor (PAT_SSN, DOC_ID) VALUES (:PAT_SSN, :DOC_ID;
+
+/*The prescription entity is for tying everything together, not for display purposes.
+So we will use this code to display an actual prescription*/
+/*A nice table giving all the useful information for all prescriptions in order of oldest issue date*/
+SELECT M.ID AS 'MED_ID', M.name AS 'Medication', P.SSN, P.last_name AS 'Patient Last', D.ID AS 'DOC_ID', D.last_name AS 'Doctor Last', PRES.issue_date AS 'Issue Date' FROM patient P
+INNER JOIN prescription PRES ON PRES.PAT_SSN = P.SSN
+INNER JOIN medication M ON M.ID = PRES.MED_ID
+INNER JOIN doctor D ON D.ID = PRES.DOC_ID
+ORDER BY PRES.issue_date;
+
+/*Same nice prescription table, but for an inputted SSN, display all of a patient's prescriptions*/
+SELECT M.ID AS 'MED_ID', M.name AS 'Medication', P.SSN, P.last_name AS 'Patient Last', D.ID AS 'DOC_ID', D.last_name AS 'Doctor Last', PRES.issue_date AS 'Issue Date' FROM patient P
+INNER JOIN prescription PRES ON PRES.PAT_SSN = P.SSN
+INNER JOIN medication M ON M.ID = PRES.MED_ID
+INNER JOIN doctor D ON D.ID = PRES.DOC_ID
+WHERE P.SSN = '&userInput'
+ORDER BY PRES.issue_date;
+
 /*Patient Table
 view patient table*/
 SELECT * FROM patient;
@@ -62,11 +89,12 @@ UPDATE doctor
 SET C_ID = NULL
 WHERE C_ID = :ID;
 
-/*edit clinic*/
 UPDATE clinic
 SET address = :address, city = :city, state = :state, zip = :zip
 WHERE ID = :ID;
 
+/*edit patient_doctor*/
+/*Variations of all the tables we may use*/
 /*Creates doctor_patient m:m table with IDs and last names for context for User*/
 /*Order by SSN: for patient's doctors. Order by: D.ID for doctor's patients*/
 SELECT DISTINCT P.SSN, P.last_name AS 'Patient Last', D.ID AS 'DOC_ID', D.last_name AS 'Doctor Last' FROM patient P
@@ -162,17 +190,3 @@ INNER JOIN medication M ON M.ID = PRES.MED_ID
 WHERE M.ID = '&userInput'
 ORDER BY SSN;
 
-/*A nice table giving all the useful information for all prescriptions in order of oldest issue date*/
-SELECT M.ID AS 'MED_ID', M.name AS 'Medication', P.SSN, P.last_name AS 'Patient Last', D.ID AS 'DOC_ID', D.last_name AS 'Doctor Last', PRES.issue_date AS 'Issue Date' FROM patient P
-INNER JOIN prescription PRES ON PRES.PAT_SSN = P.SSN
-INNER JOIN medication M ON M.ID = PRES.MED_ID
-INNER JOIN doctor D ON D.ID = PRES.DOC_ID
-ORDER BY PRES.issue_date;
-
-/*Same nice prescription table, but for an inputted SSN, display all of a patient's prescriptions*/
-SELECT M.ID AS 'MED_ID', M.name AS 'Medication', P.SSN, P.last_name AS 'Patient Last', D.ID AS 'DOC_ID', D.last_name AS 'Doctor Last', PRES.issue_date AS 'Issue Date' FROM patient P
-INNER JOIN prescription PRES ON PRES.PAT_SSN = P.SSN
-INNER JOIN medication M ON M.ID = PRES.MED_ID
-INNER JOIN doctor D ON D.ID = PRES.DOC_ID
-WHERE P.SSN = '&userInput'
-ORDER BY PRES.issue_date;
