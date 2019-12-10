@@ -1,12 +1,4 @@
-/*NEW CODE*/
-/*display patient_doctor. (There's a prettier version with inner joins below)*/
-SELECT * FROM patient_doctor;
-/*delete patient_doctor*/
-DELETE FROM patient_doctor WHERE PAT_SSN = :PAT_SSN AND DOC_ID = :DOC_ID;
-/*new relationship: 
-These must use values that already exist, like from a pull-down bar.
-Also will not allow duplicates.*/
-INSERT INTO patient_doctor (PAT_SSN, DOC_ID) VALUES (:PAT_SSN, :DOC_ID);
+
 
 /*The prescription entity is for tying everything together, not for display purposes.
 So we will use this code to display an actual prescription*/
@@ -27,71 +19,173 @@ ORDER BY PRES.issue_date;
 
 /*Patient Table
 view patient table*/
-SELECT * FROM patient;
+ SELECT SSN, first_name, last_name, DATE_FORMAT(birthdate, '%m/%d/%Y') AS birthdate
+ FROM	patient;
 
 /*new patient*/
 INSERT INTO patient(SSN, first_name, last_name, birthdate)
-VALUE(:SSN, :first_name,:last_name, :birthdate);
+VALUES(?,?,?,?);
+
+/* Single patient page based on SSN*/
+ SELECT SSN, first_name, last_name, DATE_FORMAT(birthdate, '%m/%d/%Y') AS birthdate
+ FROM	patient WHERE	SSN = ?;
+ SELECT prescription.ID AS pID,
+	DATE_FORMAT(prescription.issue_date, '%m/%d/%Y') AS issue_date,
+	IfNull(clinic.name, 'null') as clinic_name,
+	IfNull(clinic.ID, 'null') as cID,
+	doctor.first_name AS doctor_first_name,
+	doctor.last_name AS doctor_last_name,
+	doctor.ID AS dID,
+	medication.name,
+	medication.ID
+	FROM	prescription
+	INNER JOIN	medication	ON prescription.MED_ID	= medication.ID
+	INNER JOIN	doctor		ON prescription.DOC_ID	= doctor.ID
+	LEFT JOIN	clinic		ON doctor.C_ID = clinic.ID
+	WHERE prescription.PAT_SSN = ?
+	ORDER BY prescription.issue_date DESC;
 
 /*delete patient*/
-DELETE FROM patient WHERE SSN = :SSN;
+DELETE FROM patient WHERE SSN = ?;
 
 /*edit patient*/
 UPDATE patient
-SET first_name = :first_name, last_name = :last_name, birthdate=birthdate
-WHERE SSN = :SSN;
+SET first_name = ?, last_name = ?
+WHERE SSN = ?;
 
 /*Medication Table*/
 /*view medication table*/
-SELECT * FROM medication;
+SELECT ID, name, CASE WHEN p_safe = 1 THEN 'Yes' ELSE 'No' END AS p_safe
+FROM medication;
 
 /*new medication*/
-INSERT INTO medication(ID, name, p_safe)
-VALUE(:ID, name, p_safe);
+INSERT INTO medication( name, p_safe)
+VALUE(?, ?);
+
+/*Displays a medication paged based on one ID*/
+SELECT ID, name, CASE WHEN p_safe = 1 THEN 'checked' ELSE '' END AS p_safe
+FROM medication WHERE ID = ?;
+
+SELECT
+prescription.ID AS pID,
+DATE_FORMAT(prescription.issue_date, '%m/%d/%Y') AS issue_date,
+IfNull(clinic.name, 'null') as clinic_name,
+IfNull(clinic.ID, 'null') as cID,
+doctor.first_name AS doctor_first_name,
+doctor.last_name AS doctor_last_name,
+doctor.ID AS dID,
+patient.first_name,
+patient.last_name,
+patient.SSN
+FROM		prescription
+ INNER JOIN	medication	ON prescription.MED_ID	= medication.ID
+ INNER JOIN	patient		ON prescription.PAT_SSN	= patient.SSN
+ INNER JOIN	doctor		ON prescription.DOC_ID	= doctor.ID
+ LEFT JOIN	clinic		ON doctor.C_ID = clinic.ID
+ WHERE medication.ID = ?
+ ORDER BY prescription.issue_date DESC;
 
 /*delete medication*/
-DELETE FROM medication WHERE id = :id;
+DELETE FROM medication WHERE ID = ?;
 
 /*edit medication*/
 UPDATE medication
-SET name = :name, p_safe = :p_safe
-WHERE ID = :ID;
-
+SET name = ?, p_safe = ?
+WHERE ID = ?;
 
 /*Doctor Table*/
 /*view doctor table*/
-SELECT * FROM doctor;
+ SELECT doctor.ID, first_name, last_name, IfNull(clinic.name, 'null') as name
+FROM doctor
+ LEFT JOIN clinic ON doctor.C_ID = clinic.ID
+ ORDER BY doctor.ID ASC;
+
+SELECT ID, name FROM clinic;
 
 /*new doctor*/
-INSERT INTO doctor(ID, first_name, last_name, C_ID)
-VALUE(:ID, :first_name,:last_name, :C_ID);
+INSERT INTO doctor(first_name, last_name, C_ID)
+VALUE(?, ?, ?);
 
 /*delete doctor*/
-DELETE FROM doctor WHERE id = :id;
+DELETE FROM doctor WHERE ID = ?;
 
 /*edit doctor*/
 UPDATE doctor
-SET first_name = :first_name, last_name = :last_name, C_ID = :C_ID
-WHERE ID = :ID;
+SET first_name = ?, last_name = ?, C_ID = ?
+WHERE ID = ?;
+
+/*Displays page from doctor ID, includes their patients from patient_doctor*/
+SELECT ID, first_name, last_name, IfNull(C_ID, 0) as C_ID
+ FROM doctor WHERE ID = ?;
+
+ SELECT	ID, name FROM	clinic;
+
+ SELECT SSN, patient.first_name, patient.last_name, DATE_FORMAT(birthdate, '%m/%d/%Y') AS birthdate, DOC_ID
+ FROM patient
+ INNER JOIN patient_doctor ON patient.SSN = patient_doctor.PAT_SSN
+ WHERE patient_doctor.DOC_ID = ?
+ ORDER BY patient.SSN ASC;
+
+ SELECT DISTINCT SSN, patient.first_name, patient.last_name 
+ FROM patient WHERE NOT EXISTS (SELECT * FROM patient_doctor
+	WHERE patient_doctor.PAT_SSN = patient.SSN AND patient_doctor.DOC_ID = '1' )
+ORDER BY patient.first_name ASC
+
+ SELECT	prescription.ID AS pID, DATE_FORMAT(prescription.issue_date, '%m/%d/%Y') AS issue_date,
+clinic.name AS clinic_name, clinic.ID AS cID, patient.first_name, patient.last_name, patient.SSN,
+medication.name, medication.ID
+ FROM prescription
+INNER JOIN	medication	ON prescription.MED_ID	= medication.ID
+ INNER JOIN	patient		ON prescription.PAT_SSN	= patient.SSN
+INNER JOIN	doctor		ON prescription.DOC_ID	= doctor.ID
+ LEFT JOIN	clinic		ON doctor.C_ID = clinic.ID
+ WHERE prescription.DOC_ID = ?
+ ORDER BY prescription.issue_date DESC;
+ 
+/*display patient_doctor. (There's a prettier version with inner joins below)*/
+SELECT * FROM patient_doctor;
+/*delete patient_doctor*/
+DELETE FROM patient_doctor WHERE PAT_SSN = ? AND DOC_ID = ?;
+/*new patient_doctor relationship: */
+INSERT INTO patient_doctor (PAT_SSN, DOC_ID) VALUES (?, ?);
 
 /*Clinic Table*/
 /*view clinic table*/
-SELECT * FROM clinic;
+SELECT ID, name, address, city, state, zip
+FROM clinic;
 
 /*new clinic*/
 INSERT INTO clinic(ID, address, city, state, zip)
-VALUE(:ID, :address, :city, :state, :zip);
+VALUE(?,?,?,?,?);
+
+/*Page based on a singular clinic id to update*/
+SELECT ID, name, address, city, state, zip
+FROM clinic
+WHERE ID = ?;
+
+ SELECT	doctor.ID, first_name, last_name,
+ FROM	doctor
+ INNER JOIN clinic ON doctor.C_ID = clinic.ID
+ WHERE doctor.C_ID = ?
+ ORDER BY doctor.ID ASC;
+
+SELECT prescription.ID AS pID, DATE_FORMAT(prescription.issue_date, '%m/%d/%Y') AS issue_date,
+	doctor.first_name AS doctor_first_name, doctor.last_name AS doctor_last_name, doctor.ID AS dID,
+patient.first_name, patient.last_name, patient.SSN, medication.name, medication.ID
+ FROM prescription
+INNER JOIN	medication	ON prescription.MED_ID	= medication.ID
+ INNER JOIN	patient		ON prescription.PAT_SSN	= patient.SSN
+ INNER JOIN	doctor		ON prescription.DOC_ID	= doctor.ID
+ INNER JOIN	clinic		ON doctor.C_ID = clinic.ID
+ WHERE doctor.C_ID = ?
+ ORDER BY prescription.issue_date DESC;
 
 /*delete clinic*/
-DELETE FROM clinic WHERE id = :id
-/*Update foreign C_ID of doctor after deletion*/
-UPDATE doctor
-SET C_ID = NULL
-WHERE C_ID = :ID;
-
+DELETE FROM clinic WHERE ID = ?;
+/*Update clinic*/
 UPDATE clinic
-SET address = :address, city = :city, state = :state, zip = :zip
-WHERE ID = :ID;
+SET name = ?, address = ?, city = ?, state = ?, zip = ?
+WHERE ID = ?;
 
 /*Variations of all the tables we may use*/
 /*Creates doctor_patient m:m table with IDs and last names for context for User*/
