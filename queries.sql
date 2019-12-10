@@ -26,7 +26,8 @@ view patient table*/
 INSERT INTO patient(SSN, first_name, last_name, birthdate)
 VALUES(?,?,?,?);
 
-/* Single patient page based on SSN*/
+/* View a single patient page based on SSN*/
+/*Also displays patient's doctors and prescriptions*/
  SELECT SSN, first_name, last_name, DATE_FORMAT(birthdate, '%m/%d/%Y') AS birthdate
  FROM	patient WHERE	SSN = ?;
  
@@ -57,7 +58,7 @@ LEFT JOIN	clinic			ON doctor.C_ID	= clinic.ID
 DELETE FROM patient WHERE SSN = ?;
 
 /*delete patient_doctor of specific patient*/
-patient_doctor WHERE PAT_SSN = ? AND DOC_ID = ?;
+DELETE FROM patient_doctor WHERE PAT_SSN = ? AND DOC_ID = ?;
 
 /*edit patient*/
 UPDATE patient
@@ -73,7 +74,7 @@ FROM medication;
 INSERT INTO medication( name, p_safe)
 VALUE(?, ?);
 
-/*Displays a medication paged based on one ID*/
+/*Displays a single medication page including prescriptions it is a part of*/
 SELECT ID, name, CASE WHEN p_safe = 1 THEN 'checked' ELSE '' END AS p_safe
 FROM medication WHERE ID = ?;
 
@@ -94,7 +95,7 @@ DELETE FROM medication WHERE ID = ?;
 
 /*edit medication*/
 UPDATE medication
-SET name = ?, p_safe = ?
+SET name = ?, p_safe = ? 
 WHERE ID = ?;
 
 /*Doctor Table*/
@@ -119,6 +120,7 @@ SET first_name = ?, last_name = ?, C_ID = ?
 WHERE ID = ?;
 
 /*Displays page from doctor ID, includes their patients from patient_doctor*/
+/*Also displays the prescriptions they have given*/
 SELECT ID, first_name, last_name, IfNull(C_ID, 0) as C_ID
  FROM doctor WHERE ID = ?;
 
@@ -149,7 +151,7 @@ INNER JOIN	doctor		ON prescription.DOC_ID	= doctor.ID
  INSERT INTO prescription (issue_date, PAT_SSN, MED_ID, DOC_ID)
 VALUES (Now(), ?, ?, ?);
 
-/*display patient_doctor. (There's a prettier version with inner joins below)*/
+/*display patient_doctor.*/
 SELECT * FROM patient_doctor;
 /*delete patient_doctor*/
 DELETE FROM patient_doctor WHERE PAT_SSN = ? AND DOC_ID = ?;
@@ -165,7 +167,8 @@ FROM clinic;
 INSERT INTO clinic(ID, address, city, state, zip)
 VALUE(?,?,?,?,?);
 
-/*Page based on a singular clinic id to update*/
+/*Page based on a single clinic froma  passed ID*/
+/*Also displays the clinic's current doctors and prescriptions*/
 SELECT ID, name, address, city, state, zip
 FROM clinic
 WHERE ID = ?;
@@ -195,6 +198,8 @@ SET name = ?, address = ?, city = ?, state = ?, zip = ?
 WHERE ID = ?;
 
 /*Searchbar that uses keyword*/
+/*Displays all the prescriptions involved with the keyword*/
+/*Then displays any doctors, medications, or patients with the keyword*/
  SELECT DISTINCT prescription.ID AS pID, DATE_FORMAT(issue_date, '%m/%d/%Y') AS issue_date,
 IfNull(clinic.name, 'null') AS clinic_name, IfNull(clinic.ID, 'null') AS cID, doctor.first_name AS doctor_first_name,
 doctor.last_name AS doctor_last_name, doctor.ID AS dID, SSN, patient.first_name, patient.last_name,
