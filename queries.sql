@@ -142,6 +142,9 @@ INNER JOIN	doctor		ON prescription.DOC_ID	= doctor.ID
  WHERE prescription.DOC_ID = ?
  ORDER BY prescription.issue_date DESC;
  
+ INSERT INTO prescription (issue_date, PAT_SSN, MED_ID, DOC_ID)
+VALUES (Now(), ?, ?, ?);
+
 /*display patient_doctor. (There's a prettier version with inner joins below)*/
 SELECT * FROM patient_doctor;
 /*delete patient_doctor*/
